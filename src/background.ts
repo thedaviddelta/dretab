@@ -14,7 +14,9 @@ const openTab = (index: number, url?: string): Promise<browser.tabs.Tab> => tabs
 const getBookmarkUrls = async (bookmarkId: string): Promise<string[]> => {
     try {
         const [ bookmark ] = await bookmarks.get(bookmarkId);
-        const urls = bookmark.children?.map(e => e.url) ?? [ bookmark.url ];
+        const urls = bookmark.type === "folder"
+            ? await bookmarks.getChildren(bookmarkId).then(arr => arr.map(e => e.url))
+            : [ bookmark.url ];
         return urls.filter((url): url is string => !!url)
             .filter(url => !url.match(/^(javascript|place):/i));
     } catch (e) {
@@ -42,10 +44,13 @@ menus.create({
     title: "Abrir en una pestaña a la derecha"
 });
 
-menus.onClicked.addListener(async ({ menuItemId, bookmarkId }, tab) => {
-    if (menuItemId !== MenuItemIds.Bookmark || !tab)
+menus.onClicked.addListener(async ({ menuItemId, bookmarkId }) => {
+    if (menuItemId !== MenuItemIds.Bookmark)
         return;
     
-    const urls = await getBookmarkUrls(bookmarkId);
+    const [[ tab ], urls] = await Promise.all([
+        tabs.query({ currentWindow: true, active: true }),
+        getBookmarkUrls(bookmarkId)
+    ]);
     urls.forEach(url => openTab(tab.index + 1, url));
 });
