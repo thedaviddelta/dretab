@@ -1,0 +1,19 @@
+{
+    "manifest_version": 2,
+    "name": "dretab",
+    "description": "",
+    "version": "1.0",
+    "background": {
+        "scripts": ["out/background.js"]
+    },
+    "permissions": [
+        "menus",
+        "tabs",
+        "bookmarks"
+    ],
+    "applications": {
+        "gecko": {
+            "id": "dretab@thedaviddelta.com"
+        }
+    }
+}
