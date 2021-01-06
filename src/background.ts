@@ -52,5 +52,5 @@ menus.onClicked.addListener(async ({ menuItemId, bookmarkId }) => {
         tabs.query({ currentWindow: true, active: true }),
         getBookmarkUrls(bookmarkId)
     ]);
-    urls.forEach(url => openTab(tab.index + 1, url));
+    urls.forEach((url, i) => openTab(tab.index + 1 + i, url));
 });
