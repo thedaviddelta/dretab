@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
-    "name": "dretab",
-    "description": "",
+    "name": "DreTab: __MSG_newTab__",
+    "description": "Extension for adding Chromium's \"New Tab to the right\" to Gecko/Firefox",
     "version": "1.0",
     "background": {
         "scripts": ["out/background.js"]
@@ -21,5 +21,6 @@
         "48": "img/icon48.png",
         "96": "img/icon96.png",
         "128": "img/icon128.png"
-    }
+    },
+    "default_locale": "en"
 }

@@ -1,4 +1,4 @@
-const { menus, tabs, bookmarks } = browser;
+const { menus, tabs, bookmarks, i18n } = browser;
 
 // ID constants
 
@@ -29,7 +29,7 @@ const getBookmarkUrls = async (bookmarkId: string): Promise<string[]> => {
 menus.create({
     id: MenuItemIds.Tab,
     contexts: ["tab"],
-    title: "Nueva pestaña a la derecha"
+    title: i18n.getMessage("newTab")
 });
 
 menus.onClicked.addListener(({ menuItemId }, tab) => {
@@ -41,7 +41,7 @@ menus.onClicked.addListener(({ menuItemId }, tab) => {
 menus.create({
     id: MenuItemIds.Bookmark,
     contexts: ["bookmark"],
-    title: "Abrir en una pestaña a la derecha"
+    title: i18n.getMessage("openBookmark")
 });
 
 menus.onClicked.addListener(async ({ menuItemId, bookmarkId }) => {
