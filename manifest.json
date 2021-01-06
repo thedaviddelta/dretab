@@ -17,6 +17,7 @@
         }
     },
     "icons": {
+        "16": "img/empty.png",
         "48": "img/icon48.png",
         "96": "img/icon96.png",
         "128": "img/icon128.png"
