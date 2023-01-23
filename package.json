@@ -1,8 +1,14 @@
 {
   "name": "dretab",
   "private": true,
+  "scripts": {
+    "dev": "tsc --watch & web-ext run -f firefoxdeveloperedition",
+    "build": "tsc && web-ext build -o",
+    "lint": "web-ext lint"
+  },
   "devDependencies": {
-    "@types/firefox-webext-browser": "^82.0.0",
-    "typescript": "^4.1.3"
+    "@types/firefox-webext-browser": "^109.0.0",
+    "typescript": "^4.9.4",
+    "web-ext": "^7.4.0"
   }
 }

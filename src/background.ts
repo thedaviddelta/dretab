@@ -1,4 +1,4 @@
-const { menus, tabs, bookmarks, i18n } = browser;
+const { runtime, menus, tabs, bookmarks, i18n } = browser;
 
 // ID constants
 
@@ -15,39 +15,45 @@ const getBookmarkUrls = async (bookmarkId: string): Promise<string[]> => {
     try {
         const [ bookmark ] = await bookmarks.get(bookmarkId);
         const urls = bookmark.type === "folder"
-            ? await bookmarks.getChildren(bookmarkId).then(arr => arr.map(e => e.url))
+            ? await bookmarks
+                .getChildren(bookmarkId)
+                .then(arr => arr.map(e => e.url))
             : [ bookmark.url ];
-        return urls.filter((url): url is string => !!url)
+
+        return urls
+            .filter((url): url is string => !!url)
             .filter(url => !url.match(/^(javascript|place):/i));
     } catch (e) {
         return [];
     }
 }
 
-// Tab menu
+// Menu actions setup
 
-menus.create({
-    id: MenuItemIds.Tab,
-    contexts: ["tab"],
-    title: i18n.getMessage("newTab")
+runtime.onInstalled.addListener(() => {
+    menus.create({
+        id: MenuItemIds.Tab,
+        contexts: ["tab"],
+        title: i18n.getMessage("newTab")
+    });
+
+    menus.create({
+        id: MenuItemIds.Bookmark,
+        contexts: ["bookmark"],
+        title: i18n.getMessage("openBookmark")
+    });
 });
+
+// Action listeners
 
 menus.onClicked.addListener(({ menuItemId }, tab) => {
     menuItemId === MenuItemIds.Tab && tab && openTab(tab.index + 1);
 });
 
-// Bookmark menu
-
-menus.create({
-    id: MenuItemIds.Bookmark,
-    contexts: ["bookmark"],
-    title: i18n.getMessage("openBookmark")
-});
-
 menus.onClicked.addListener(async ({ menuItemId, bookmarkId }) => {
     if (menuItemId !== MenuItemIds.Bookmark)
         return;
-    
+
     const [[ tab ], urls] = await Promise.all([
         tabs.query({ currentWindow: true, active: true }),
         getBookmarkUrls(bookmarkId)
